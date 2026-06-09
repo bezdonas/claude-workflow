@@ -5,7 +5,11 @@ argument-hint: Path to plan md file (defaults to most-recently-modified in CLAUD
 
 # Plan Executor
 
-Plans directory: `/Users/ramilaliev/devprojects/tutteo/CLAUDE_PLANS/`
+Plans live in a **canonical, fixed location: `~/devprojects/tutteo/CLAUDE_PLANS/`** — always read the plan from there, regardless of which checkout the session runs in.
+
+**Implementation cwd** (branch, edits, tests, commits) = the checkout the session was started in (`tutteo`, `tutteo-2`, or a worktree). Resolve the repo root from the session's initial cwd. If cwd is not inside a checkout or is ambiguous, ASK before doing repo work — do not assume.
+
+Plan content uses **repo-relative paths**; resolve them against the implementation cwd's repo root. The same plan runs unchanged in either checkout. The two checkouts (`tutteo`, `tutteo-2`) are identical mirrors for parallel work.
 
 Target plan: `$ARGUMENTS`
 

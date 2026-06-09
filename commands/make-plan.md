@@ -5,7 +5,11 @@ argument-hint: Linear ID/URL or task description, optionally + topic name
 
 # Plan Creator
 
-Target plans directory: `/Users/ramilaliev/devprojects/tutteo/CLAUDE_PLANS/`
+Plans directory is **canonical and fixed: `~/devprojects/tutteo/CLAUDE_PLANS/`** — ALL plans live here, regardless of which checkout the session runs in (`tutteo`, `tutteo-2`, worktrees). Never write a plan into a non-canonical checkout's `CLAUDE_PLANS/`.
+
+**Plan content must be checkout-agnostic.** Reference every file by **repo-relative path** (e.g. `packages/adagio/src/foo.ts`), NEVER an absolute path containing `tutteo` or `tutteo-2`. The same plan must be executable from either checkout. The implementation checkout is decided at `work-plan` time, not pinned in the plan.
+
+**Non-interactive use (orchestrator):** when invoked by `/sync-board`, `make-plan` runs only for tasks with no existing plan (no overwrite prompt) with an explicit Linear ID (no "what to plan" prompt). It must not block on AskUserQuestion in that path.
 
 Input: `$ARGUMENTS`
 
@@ -246,5 +250,5 @@ After write:
 - **No code edits.** Only the plan file is written.
 - **No empty sections.** If a section doesn't apply (e.g. no Linear project), omit it instead of leaving a placeholder header.
 - **No fake confidence.** Every uncertain decision becomes a `❔` Blocking unknown, not a stated decision.
-- **Respect plan path.** Hardcoded `/Users/ramilaliev/devprojects/tutteo/CLAUDE_PLANS/`. Do not write elsewhere.
+- **Respect plan path.** Write to the runtime-resolved plans dir (session cwd's checkout; ask if ambiguous — see top of file). Do not hardcode a checkout and do not write outside the resolved `CLAUDE_PLANS/`.
 - **Stay terse.** Future sessions read this every time.
